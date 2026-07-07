@@ -27,7 +27,6 @@ function displayParticipants() {
     imageNames.forEach(name => {
         const tag = document.createElement('span');
         tag.className = 'participant-tag';
-        // Убираем расширение файла для красивого отображения
         const displayName = name.replace(/\.[^.]+$/, '');
         tag.textContent = displayName;
         participantList.appendChild(tag);
@@ -50,23 +49,41 @@ function spinWheel() {
     // Добавляем анимацию
     document.querySelector('.wheel-wrapper').classList.add('spinning');
     
-    // Количество прокруток
-    const spins = 15 + Math.floor(Math.random() * 10); // 15-25 раз
+    // Выбираем финальное фото заранее
+    const finalImage = getRandomImage();
     
-    let count = 0;
-    const interval = setInterval(() => {
+    // Количество прокруток (увеличим для красоты)
+    const totalSpins = 20 + Math.floor(Math.random() * 10); // 20-30 раз
+    
+    let currentStep = 0;
+    
+    // Функция одного "тика" анимации
+    function tick() {
         // Показываем случайное фото
         const randomImage = getRandomImage();
         resultImage.src = `images/${randomImage}`;
         
-        count++;
+        currentStep++;
         
-        // Замедляем под конец (эффект остановки)
-        if (count >= spins) {
-            clearInterval(interval);
-            
-            // Финальный выбор
-            const finalImage = getRandomImage();
+        // Вычисляем задержку с плавным замедлением
+        let delay;
+        if (currentStep < totalSpins - 5) {
+            // Первая часть - быстрая прокрутка
+            delay = 80 + Math.random() * 30;
+        } else if (currentStep < totalSpins - 2) {
+            // Средняя часть - замедление
+            const progress = (currentStep - (totalSpins - 5)) / 3;
+            delay = 100 + progress * 150;
+        } else {
+            // Последние 2 шага - очень медленно
+            delay = 300 + (currentStep - (totalSpins - 2)) * 200;
+        }
+        
+        // Если ещё не дошли до конца - продолжаем
+        if (currentStep < totalSpins) {
+            setTimeout(tick, delay);
+        } else {
+            // ФИНАЛ - показываем заранее выбранное фото
             resultImage.src = `images/${finalImage}`;
             
             // Красивое имя без расширения
@@ -80,7 +97,10 @@ function spinWheel() {
             spinBtn.disabled = false;
             spinBtn.textContent = '🔁 Крутить!';
         }
-    }, 100 + (count > spins - 5 ? 50 * (count - spins + 5) : 0)); // Замедление в конце
+    }
+    
+    // Запускаем анимацию
+    tick();
 }
 
 // Событие на кнопку
@@ -89,5 +109,4 @@ spinBtn.addEventListener('click', spinWheel);
 // Отображаем участников при загрузке
 displayParticipants();
 
-// Сообщаем о готовности
 console.log('🎡 Барабан готов! Количество участников:', imageNames.length);
