@@ -43,8 +43,8 @@ function getRandomImage() {
 function spinWheel() {
     // Блокируем кнопку
     spinBtn.disabled = true;
-    spinBtn.textContent = '🌀 Крутится...';
-    status.textContent = '🎡 Вращаем барабан!';
+    spinBtn.textContent = '🙀 Крутится...';
+    status.textContent = '😸 Вращаем барабан!';
     
     // Добавляем анимацию
     document.querySelector('.wheel-wrapper').classList.add('spinning');
