@@ -88,14 +88,14 @@ function spinWheel() {
             
             // Красивое имя без расширения
             const displayName = finalImage.replace(/\.[^.]+$/, '');
-            status.textContent = `🎉 Сегодня ты — ${displayName}!`;
+            status.textContent = `🐈 Сегодня ты — ${displayName}!`;
             
             // Убираем анимацию
             document.querySelector('.wheel-wrapper').classList.remove('spinning');
             
             // Разблокируем кнопку
             spinBtn.disabled = false;
-            spinBtn.textContent = '🔁 Крутить!';
+            spinBtn.textContent = 'Крутить!';
         }
     }
     
@@ -109,4 +109,4 @@ spinBtn.addEventListener('click', spinWheel);
 // Отображаем участников при загрузке
 displayParticipants();
 
-console.log('🎡 Барабан готов! Количество участников:', imageNames.length);
+console.log('🐈‍⬛ Барабан готов! Количество участников:', imageNames.length);
