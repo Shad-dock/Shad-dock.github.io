@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎡 Кто ты сегодня?</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎡 Кто ты сегодня?</h1>
+        
+        <div class="wheel-wrapper">
+            <div class="wheel" id="wheel">
+                <img id="resultImage" src="images/photo1.jpg" alt="Результат">
+            </div>
+        </div>
+
+        <button id="spinBtn">🔁 Крутить!</button>
+        <p id="status">Нажми на кнопку</p>
+        
+        <!-- Список всех участников (для красоты) -->
+        <div class="participants">
+            <h3>👥 Участники:</h3>
+            <div id="participantList"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
