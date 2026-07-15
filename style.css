@@ -226,9 +226,9 @@ button:disabled {
 .bottom-sheet-content {
     background: linear-gradient(145deg, #1e1e42, #2a2a5a);
     border-radius: 24px 24px 0 0;
-    max-width: 480px;
+    max-width: 560px;
     width: 100%;
-    padding: 25px 30px 30px;
+    padding: 30px 35px 35px;
     border-top: 3px solid rgba(255, 215, 0, 0.3);
     box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.5);
     position: relative;
@@ -275,14 +275,14 @@ button:disabled {
 
 .bottom-sheet-body {
     display: flex;
-    gap: 20px;
+    gap: 28px;
     align-items: center;
     margin-top: 10px;
 }
 
 .bottom-sheet-image {
-    width: 90px;
-    height: 90px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #ffd700;
@@ -302,19 +302,19 @@ button:disabled {
 }
 
 .bottom-sheet-info h2 {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     color: #ffd700;
     margin-bottom: 4px;
     font-weight: 700;
 }
 
 .bottom-sheet-info p {
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     color: #c8c8e8;
     line-height: 1.4;
     margin-bottom: 8px;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -327,10 +327,10 @@ button:disabled {
 
 .bottom-sheet-tag {
     background: rgba(255, 215, 0, 0.12);
-    padding: 2px 12px;
+    padding: 4px 16px;
     border-radius: 12px;
     border: 1px solid rgba(255, 215, 0, 0.15);
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     color: #ffd700;
 }
 
@@ -343,21 +343,21 @@ button:disabled {
     }
 
     .bottom-sheet-image {
-        width: 70px;
-        height: 70px;
+        width: 100px;
+        height: 100px;
     }
 
     .bottom-sheet-info h2 {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
     }
 
     .bottom-sheet-info p {
-        font-size: 0.8rem;
-        -webkit-line-clamp: 2;
+        font-size: 0.95rem;
+        -webkit-line-clamp: 3;
     }
 
     .bottom-sheet-close {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         top: 14px;
         right: 16px;
     }
@@ -369,8 +369,8 @@ button:disabled {
 
 @media (max-width: 380px) {
     .bottom-sheet-image {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
     }
 
     .bottom-sheet-info h2 {
