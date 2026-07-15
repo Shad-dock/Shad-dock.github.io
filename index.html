@@ -26,27 +26,26 @@
         </div>
     </div>
 
-        <!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" id="modalClose">&times;</span>
-            <div class="modal-body">
-                <div class="modal-image">
-                    <img id="modalImage" src="" alt="Фото">
+        <!-- ===== ОКОШКО СНИЗУ ===== -->
+    <div class="bottom-sheet-overlay" id="bottomSheetOverlay"></div>
+    
+    <div class="bottom-sheet" id="bottomSheet">
+        <div class="bottom-sheet-content">
+            <button class="bottom-sheet-close" id="bottomSheetClose">&times;</button>
+            <div class="bottom-sheet-body">
+                <div class="bottom-sheet-image">
+                    <img id="sheetImage" src="" alt="Фото">
                 </div>
-                <div class="modal-info">
-                    <h2 id="modalName"></h2>
-                    <p id="modalDescription"></p>
-                    <div id="modalTags"></div>
+                <div class="bottom-sheet-info">
+                    <h2 id="sheetName"></h2>
+                    <p id="sheetDescription"></p>
+                    <div class="bottom-sheet-tags" id="sheetTags"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Подключаем старый скрипт -->
     <script src="script.js"></script>
-    
-    <!-- НОВЫЙ скрипт с карточками — подключаем ПОСЛЕ старого -->
     <script src="heroes.js"></script>
 </body>
 </html>
