@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐈‍⬛Кто ты сегодня?</title>
+    <title>🐱 Кто ты сегодня?</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>🐈‍⬛Кто ты сегодня?</h1>
+        <h1>🐱 Кто ты сегодня?</h1>
         
         <div class="wheel-wrapper">
             <div class="wheel" id="wheel">
@@ -16,13 +16,30 @@
             </div>
         </div>
 
-        <button id="spinBtn">Крутить!</button>
-        <p id="status">Нажми на кнопку</p>
+        <button id="spinBtn">😺 Крутить!</button>
+        <p id="status">🐾 Нажми на кнопку, чтобы узнать!</p>
         
-        <!-- Список всех участников (для красоты) -->
+        <!-- Список всех участников -->
         <div class="participants">
-            <h3>🐾Разгерцовка:</h3>
+            <h3>🐾 Разгерцовка:</h3>
             <div id="participantList"></div>
+        </div>
+    </div>
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ КАРТОЧКИ ===== -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span id="modalClose" class="modal-close">&times;</span>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modalImage" src="" alt="Фото">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalName"></h2>
+                    <p id="modalDescription"></p>
+                    <div class="modal-tags" id="modalTags"></div>
+                </div>
+            </div>
         </div>
     </div>
 
