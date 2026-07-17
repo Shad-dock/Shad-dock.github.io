@@ -101,6 +101,13 @@ function spinWheel() {
             // Красивое имя без расширения
             const displayName = finalImage.replace(/\.[^.]+$/, '');
             status.textContent = `🐈 Сегодня ты — ${displayName}!`;
+
+            if (typeof fireConfetti === 'function') {
+                fireConfetti();
+                console.log('🎊 Конфетти вызваны из spinWheel!');
+            } else {
+                console.warn('⚠️ fireConfetti не найдена. Проверь подключение heroes.js');
+            }
             
             // Убираем анимацию
             document.querySelector('.wheel-wrapper').classList.remove('spinning');
@@ -121,4 +128,4 @@ spinBtn.addEventListener('click', spinWheel);
 // Отображаем участников при загрузке
 displayParticipants();
 
-console.log('🐈‍⬛ Барабан готов! Количество участников:', imageNames.length);
+console.log('🐈‍⬛ Барабан готов! 4.0 Количество участников:', imageNames.length);
