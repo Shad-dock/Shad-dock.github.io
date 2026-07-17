@@ -296,4 +296,4 @@ if (originalSpinWheel) {
     };
 }
 
-console.log('🐾 heroes.js загружен! Окошко снизу готово. Конфетти');
+console.log('🐾 heroes.js загружен! Окошко снизу готово. Конфетти 2.0');
