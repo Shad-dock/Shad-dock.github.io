@@ -264,21 +264,28 @@ window.addEventListener('load', function() {
 //  4. ПОБЕДИТЕЛЬ ПОСЛЕ КРУЧЕНИЯ
 // ================================================================
 
+// ================================================================
+//  4. ПОБЕДИТЕЛЬ ПОСЛЕ КРУЧЕНИЯ (С КОНФЕТТИ)
+// ================================================================
+
 const originalSpinWheel = window.spinWheel;
 
 if (originalSpinWheel) {
     window.spinWheel = function() {
         originalSpinWheel.call(this);
         
+        // Подписываемся на изменения статуса
         const statusObserver = new MutationObserver(function() {
             const statusText = status.textContent;
             if (statusText && statusText.includes('Сегодня ты —')) {
-                // 🎊 ЗАПУСКАЕМ КОНФЕТТИ
+                // 🎊 КОНФЕТТИ — ЗДЕСЬ!
                 fireConfetti();
                 
+                // Находим имя победителя
                 const name = statusText.replace('🐈 Сегодня ты — ', '').replace('!', '').trim();
                 const hero = heroes.find(h => h.name === name);
                 if (hero) {
+                    // Открываем окошко через 700 мс
                     setTimeout(() => openSheet(hero), 700);
                 }
                 statusObserver.disconnect();
