@@ -32,6 +32,7 @@ const spinBtn = document.getElementById('spinBtn');
 const resultImage = document.getElementById('resultImage');
 const status = document.getElementById('status');
 const participantList = document.getElementById('participantList');
+const heroDescription = document.getElementById('heroDescription');
 
 // Показываем список участников
 function displayParticipants() {
@@ -53,6 +54,10 @@ function getRandomImage() {
 
 // Функция вращения барабана
 function spinWheel() {
+    heroDescription.classList.remove('show');
+    heroDescription.textContent = '';
+    
+    spinBtn.disabled = true;
     // Блокируем кнопку
     spinBtn.disabled = true;
     spinBtn.textContent = '🙀 Крутится...';
@@ -101,6 +106,15 @@ function spinWheel() {
             // Красивое имя без расширения
             const displayName = finalImage.replace(/\.[^.]+$/, '');
             status.textContent = `🐈 Сегодня ты — ${displayName}!`;
+
+            const hero = heroes.find(h => h.name === displayName);
+            if (hero) {
+                heroDescription.textContent = `💭 ${hero.description}`;
+                heroDescription.classList.add('show');
+            } else {
+                heroDescription.textContent = '';
+                heroDescription.classList.remove('show');
+            }
 
             if (typeof fireConfetti === 'function') {
                 fireConfetti();
