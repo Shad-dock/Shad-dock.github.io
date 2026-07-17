@@ -261,11 +261,7 @@ window.addEventListener('load', function() {
 });
 
 // ================================================================
-//  4. ПОБЕДИТЕЛЬ ПОСЛЕ КРУЧЕНИЯ
-// ================================================================
-
-// ================================================================
-//  4. ПОБЕДИТЕЛЬ ПОСЛЕ КРУЧЕНИЯ (С КОНФЕТТИ)
+//  4. ПОБЕДИТЕЛЬ ПОСЛЕ КРУЧЕНИЯ (С КОНФЕТТИ И ОТЛАДКОЙ)
 // ================================================================
 
 const originalSpinWheel = window.spinWheel;
@@ -274,26 +270,35 @@ if (originalSpinWheel) {
     window.spinWheel = function() {
         originalSpinWheel.call(this);
         
-        // Подписываемся на изменения статуса
+        console.log('🔄 spinWheel вызван, подписываемся на статус...');
+        
         const statusObserver = new MutationObserver(function() {
             const statusText = status.textContent;
+            console.log('📢 Статус изменился:', statusText);
+            
             if (statusText && statusText.includes('Сегодня ты —')) {
-                // 🎊 КОНФЕТТИ — ЗДЕСЬ!
+                console.log('🎯 Найдено "Сегодня ты —", запускаем конфетти!');
+                
+                // 🎊 КОНФЕТТИ
                 fireConfetti();
                 
-                // Находим имя победителя
                 const name = statusText.replace('🐈 Сегодня ты — ', '').replace('!', '').trim();
+                console.log('👤 Имя победителя:', name);
+                
                 const hero = heroes.find(h => h.name === name);
                 if (hero) {
-                    // Открываем окошко через 700 мс
+                    console.log('✅ Герой найден, открываем окошко через 700мс');
                     setTimeout(() => openSheet(hero), 700);
+                } else {
+                    console.warn('⚠️ Герой не найден для имени:', name);
                 }
                 statusObserver.disconnect();
             }
         });
         
         statusObserver.observe(status, { childList: true, characterData: true, subtree: true });
+        console.log('👀 MutationObserver установлен');
     };
 }
 
-console.log('🐾 heroes.js загружен! Окошко снизу готово. Конфетти 2.0');
+console.log('🐾 heroes.js загружен! Окошко снизу готово. Конфетти 3.0');
