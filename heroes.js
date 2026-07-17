@@ -200,6 +200,7 @@ const sheetDescription = document.getElementById('sheetDescription');
 const sheetTags = document.getElementById('sheetTags');
 
 function openSheet(hero) {
+    fireConfetti();
     sheetImage.src = hero.image;
     sheetName.textContent = hero.name;
     sheetDescription.textContent = hero.description;
@@ -272,6 +273,9 @@ if (originalSpinWheel) {
         const statusObserver = new MutationObserver(function() {
             const statusText = status.textContent;
             if (statusText && statusText.includes('Сегодня ты —')) {
+                // 🎊 ЗАПУСКАЕМ КОНФЕТТИ
+                fireConfetti();
+                
                 const name = statusText.replace('🐈 Сегодня ты — ', '').replace('!', '').trim();
                 const hero = heroes.find(h => h.name === name);
                 if (hero) {
@@ -285,4 +289,4 @@ if (originalSpinWheel) {
     };
 }
 
-console.log('🐾 heroes.js загружен! Окошко снизу готово.');
+console.log('🐾 heroes.js загружен! Окошко снизу готово. Конфетти');
