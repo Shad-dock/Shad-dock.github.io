@@ -424,3 +424,46 @@ button:disabled {
         padding: 10px 16px;
     }
 }
+
+/* ============================================
+   КНОПКА "ПОДЕЛИТЬСЯ"
+   ============================================ */
+
+.share-btn {
+    background: linear-gradient(135deg, #6d6df0, #4a4ae0);
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 12px 35px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 25px rgba(109, 109, 240, 0.3);
+    margin-top: 15px;
+    letter-spacing: 0.5px;
+}
+
+.share-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 8px 35px rgba(109, 109, 240, 0.5);
+}
+
+.share-btn:active {
+    transform: scale(0.95);
+}
+
+.share-btn.copied {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+}
+
+.share-btn.downloading {
+    background: linear-gradient(135deg, #ff9800, #e65100);
+}
+
+@media (max-width: 480px) {
+    .share-btn {
+        font-size: 0.95rem;
+        padding: 10px 25px;
+    }
+}
