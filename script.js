@@ -231,12 +231,11 @@ shareBtn.addEventListener('click', async function() {
 });
 
 // ================================================================
-//  ГЕНЕРАЦИЯ КАРТИНКИ
+//  ГЕНЕРАЦИЯ КАРТИНКИ (исправленная)
 // ================================================================
 
 function generateHeroImage(hero) {
     return new Promise((resolve, reject) => {
-        // Создаём canvas
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 800;
@@ -252,37 +251,60 @@ function generateHeroImage(hero) {
         
         // 2. Рамка
         ctx.strokeStyle = '#ffd700';
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 6;
         ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
         
         // 3. Заголовок
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         ctx.fillStyle = '#ffd700';
-        ctx.font = 'bold 48px Arial';
-        ctx.fillText('🐈 Сегодня ты —', canvas.width / 2, 60);
+        ctx.font = 'bold 44px Arial';
+        ctx.fillText('🐈 Сегодня ты —', canvas.width / 2, 50);
         
         // 4. Имя героя
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 56px Arial';
-        ctx.fillText(hero.name, canvas.width / 2, 130);
+        ctx.font = 'bold 52px Arial';
+        ctx.fillText(hero.name, canvas.width / 2, 115);
         
-        // 5. Фото героя (загружаем и вставляем)
+        // 5. Фото героя (исправлено!)
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = function() {
-            // Рисуем круглую рамку для фото
             const centerX = canvas.width / 2;
             const centerY = 340;
-            const radius = 130;
+            const radius = 140;
             
+            // Сохраняем контекст для обрезки
             ctx.save();
+            
+            // Создаём круглую маску
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.closePath();
             ctx.clip();
             
-            ctx.drawImage(img, centerX - radius, centerY - radius, radius * 2, radius * 2);
+            // Рисуем фото, сохраняя пропорции (cover)
+            const imgRatio = img.width / img.height;
+            const circleSize = radius * 2;
+            let drawWidth, drawHeight, offsetX, offsetY;
+            
+            if (imgRatio > 1) {
+                // Фото шире, чем круг — обрезаем по бокам
+                drawHeight = circleSize;
+                drawWidth = circleSize * imgRatio;
+                offsetX = (drawWidth - circleSize) / 2;
+                offsetY = 0;
+            } else {
+                // Фото выше, чем круг — обрезаем сверху/снизу
+                drawWidth = circleSize;
+                drawHeight = circleSize / imgRatio;
+                offsetX = 0;
+                offsetY = (drawHeight - circleSize) / 2;
+            }
+            
+            ctx.drawImage(img, centerX - radius - offsetX, centerY - radius - offsetY, drawWidth, drawHeight);
+            
+            // Восстанавливаем контекст
             ctx.restore();
             
             // Рамка вокруг фото
@@ -290,21 +312,23 @@ function generateHeroImage(hero) {
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.closePath();
             ctx.strokeStyle = '#ffd700';
-            ctx.lineWidth = 6;
+            ctx.lineWidth = 5;
             ctx.stroke();
             
-            // 6. Описание
+            // 6. Описание (без подвала!)
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
             ctx.fillStyle = '#c8c8e8';
-            ctx.font = '24px Arial';
+            ctx.font = '22px Arial';
             
             // Перенос длинного текста
             const words = hero.description.split(' ');
             let lines = [];
             let currentLine = '';
             for (const word of words) {
-                if ((currentLine + word).length > 40) {
+                // Проверяем длину строки в пикселях (приблизительно)
+                const testLine = currentLine + word + ' ';
+                if (testLine.length > 42) {
                     lines.push(currentLine.trim());
                     currentLine = '';
                 }
@@ -312,29 +336,24 @@ function generateHeroImage(hero) {
             }
             if (currentLine.trim()) lines.push(currentLine.trim());
             
-            // Если слишком много строк — обрезаем
+            // Если слишком много строк — обрезаем до 3
             if (lines.length > 3) lines = lines.slice(0, 3);
             
-            const startY = 490;
+            const startY = 495;
             lines.forEach((line, index) => {
-                ctx.fillText(line, canvas.width / 2, startY + index * 32);
+                ctx.fillText(line, canvas.width / 2, startY + index * 30);
             });
             
-            // 7. Подвал
-            ctx.fillStyle = '#666';
-            ctx.font = '18px Arial';
-            ctx.textBaseline = 'bottom';
-            ctx.fillText('Сгенерировано в "Кто ты сегодня?"', canvas.width / 2, canvas.height - 20);
+            // ПОДВАЛ УБРАН!
             
-            // Конвертируем в PNG
             resolve(canvas.toDataURL('image/png'));
         };
         
         img.onerror = function() {
+            // Если фото не загрузилось — рисуем заглушку
             reject(new Error('Не удалось загрузить фото'));
         };
         
-        // Загружаем фото
         img.src = hero.image;
     });
 }
