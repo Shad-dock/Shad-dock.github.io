@@ -114,7 +114,7 @@ function spinWheel() {
         // Если ещё не дошли до конца - продолжаем
         if (currentStep < totalSpins) {
             setTimeout(tick, delay);
-        } else {
+                } else {
             // ФИНАЛ - показываем заранее выбранное фото
             resultImage.src = `images/${finalImage}`;
             
@@ -124,16 +124,19 @@ function spinWheel() {
 
             const hero = heroes.find(h => h.name === displayName);
             if (hero) {
+                currentHero = hero; // ⬅️ СОХРАНЯЕМ ГЕРОЯ
+                console.log('✅ currentHero сохранён:', currentHero.name);
+                
                 heroDescription.textContent = `💭 ${hero.description}`;
                 heroDescription.classList.add('show');
 
                 shareBtn.style.display = 'inline-block';
                 shareBtn.textContent = '📤 Поделиться результатом';
                 shareBtn.className = 'share-btn';
-                
             } else {
                 heroDescription.textContent = '';
                 heroDescription.classList.remove('show');
+                shareBtn.style.display = 'none';
             }
 
             if (typeof fireConfetti === 'function') {
