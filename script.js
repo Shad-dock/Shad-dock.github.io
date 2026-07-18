@@ -37,6 +37,18 @@ const heroDescription = document.getElementById('heroDescription');
 const shareBtn = document.getElementById('shareBtn');
 let currentHero = null; // Храним текущего героя для шаринга
 
+// Отладка кнопки
+console.log('🔍 shareBtn найден:', shareBtn);
+if (shareBtn) {
+    console.log('✅ Кнопка существует');
+    shareBtn.addEventListener('click', function() {
+        console.log('🖱️ Клик по кнопке!');
+        console.log('📦 currentHero:', currentHero);
+    });
+} else {
+    console.error('❌ Кнопка не найдена! Проверь id="shareBtn" в index.html');
+}
+
 // Показываем список участников
 function displayParticipants() {
     participantList.innerHTML = '';
