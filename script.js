@@ -39,6 +39,33 @@ const heroDescription = document.getElementById('heroDescription');
 const shareBtn = document.getElementById('shareBtn');
 let currentHero = null; // Храним текущего героя для шаринга
 
+// ================================================================
+//  ЗВУКИ
+// ================================================================
+
+const spinSound = new Audio('sounds/spin.mp3');
+const winSound = new Audio('sounds/win.mp3');
+
+spinSound.loop = true;
+spinSound.volume = 0.4;
+winSound.volume = 0.6;
+
+// Функция для остановки звука (чтобы не было ошибок)
+function stopSpinSound() {
+    spinSound.pause();
+    spinSound.currentTime = 0;
+}
+
+function playSpinSound() {
+    spinSound.currentTime = 0;
+    spinSound.play().catch(e => console.log('Звук вращения не загрузился:', e));
+}
+
+function playWinSound() {
+    winSound.currentTime = 0;
+    winSound.play().catch(e => console.log('Звук победы не загрузился:', e));
+}
+
 // Отладка кнопки
 console.log('🔍 shareBtn найден:', shareBtn);
 if (shareBtn) {
@@ -79,6 +106,8 @@ function spinWheel() {
     spinBtn.disabled = true;
     spinBtn.textContent = '🙀 Крутится...';
     status.textContent = '😸 Вращаем барабан!';
+
+    playSpinSound();
     
     // Добавляем анимацию
     document.querySelector('.wheel-wrapper').classList.add('spinning');
@@ -117,6 +146,11 @@ function spinWheel() {
         if (currentStep < totalSpins) {
             setTimeout(tick, delay);
                 } else {
+	    // 🎵 ОСТАНАВЛИВАЕМ ЗВУК ВРАЩЕНИЯ
+            stopSpinSound();
+            
+            // 🎵 ФИНАЛЬНЫЙ ЗВУК (победа)
+            playWinSound();
             // ФИНАЛ - показываем заранее выбранное фото
             resultImage.src = `images/${finalImage}`;
             
