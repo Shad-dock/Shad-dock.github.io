@@ -204,80 +204,90 @@ displayParticipants();
 // ================================================================
 //  ФУНКЦИИ ШАРИНГА
 // ================================================================
-
-// Копирование в буфер обмена + генерация картинки
 shareBtn.addEventListener('click', async function() {
-    if (!currentHero) return;
+    if (!currentHero) {
+        console.warn('⚠️ currentHero = null');
+        return;
+    }
     
-    // 1. Копируем текст в буфер обмена
     const shareText = `🐈 Сегодня ты — ${currentHero.name}! 💭 ${currentHero.description}`;
     
     try {
-        await navigator.clipboard.writeText(shareText);
+        shareBtn.textContent = '🖼️ Готовим картинку...';
+        shareBtn.disabled = true;
+        
+        // 1. Генерируем canvas
+        const canvas = await generateHeroCanvas(currentHero);
+        
+        // 2. Конвертируем canvas → Blob
+        const blob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/png');
+        });
+        
+        if (!blob) {
+            throw new Error('Не удалось создать Blob');
+        }
+        
+        // 3. Копируем в буфер обмена
+        const clipboardItem = new ClipboardItem({
+            'text/plain': new Blob([shareText], { type: 'text/plain' }),
+            'image/png': blob
+        });
+        
+        await navigator.clipboard.write([clipboardItem]);
+        
         shareBtn.textContent = '✅ Скопировано!';
         shareBtn.classList.add('copied');
         setTimeout(() => {
             shareBtn.textContent = '📤 Поделиться результатом';
             shareBtn.classList.remove('copied');
-        }, 2000);
-    } catch (err) {
-        console.warn('Не удалось скопировать текст:', err);
-        // Альтернативный способ
-        const textarea = document.createElement('textarea');
-        textarea.value = shareText;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        textarea.remove();
-        shareBtn.textContent = '✅ Скопировано!';
-        shareBtn.classList.add('copied');
-        setTimeout(() => {
-            shareBtn.textContent = '📤 Поделиться результатом';
-            shareBtn.classList.remove('copied');
-        }, 2000);
-    }
-    
-    // 2. Генерируем картинку для скачивания
-    try {
-        shareBtn.textContent = '🖼️ Генерируем картинку...';
-        shareBtn.classList.add('downloading');
-        
-        const imageUrl = await generateHeroImage(currentHero);
-        
-        // Скачиваем картинку
-        const link = document.createElement('a');
-        link.download = `${currentHero.name}.png`;
-        link.href = imageUrl;
-        link.click();
-        
-        shareBtn.textContent = '📥 Скачано!';
-        setTimeout(() => {
-            shareBtn.textContent = '📤 Поделиться результатом';
-            shareBtn.classList.remove('downloading');
-        }, 2000);
+            shareBtn.disabled = false;
+        }, 2500);
         
     } catch (err) {
-        console.error('Ошибка при создании картинки:', err);
-        shareBtn.textContent = '❌ Ошибка';
-        setTimeout(() => {
-            shareBtn.textContent = '📤 Поделиться результатом';
-            shareBtn.classList.remove('downloading');
-        }, 2000);
+        console.error('❌ Ошибка при копировании:', err);
+        
+        // Фолбэк: копируем только текст
+        try {
+            await navigator.clipboard.writeText(shareText);
+            shareBtn.textContent = '✅ Текст скопирован!';
+            shareBtn.classList.add('copied');
+            setTimeout(() => {
+                shareBtn.textContent = '📤 Поделиться результатом';
+                shareBtn.classList.remove('copied');
+                shareBtn.disabled = false;
+            }, 2000);
+        } catch (e) {
+            // Ручное копирование
+            const textarea = document.createElement('textarea');
+            textarea.value = shareText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            textarea.remove();
+            shareBtn.textContent = '✅ Текст скопирован!';
+            shareBtn.classList.add('copied');
+            setTimeout(() => {
+                shareBtn.textContent = '📤 Поделиться результатом';
+                shareBtn.classList.remove('copied');
+                shareBtn.disabled = false;
+            }, 2000);
+        }
     }
 });
 
 // ================================================================
-//  ГЕНЕРАЦИЯ КАРТИНКИ (исправленная)
+//  ГЕНЕРАЦИЯ CANVAS (без сохранения файла)
 // ================================================================
 
-function generateHeroImage(hero) {
+function generateHeroCanvas(hero) {
     return new Promise((resolve, reject) => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 800;
         canvas.height = 600;
         
-        // 1. Фон (градиент)
+        // Фон
         const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
         gradient.addColorStop(0, '#1a1a2e');
         gradient.addColorStop(0.5, '#16213e');
@@ -285,24 +295,27 @@ function generateHeroImage(hero) {
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // 2. Рамка
+        // Рамка
         ctx.strokeStyle = '#ffd700';
         ctx.lineWidth = 6;
         ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
         
-        // 3. Заголовок
+        // Заголовок
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         ctx.fillStyle = '#ffd700';
-        ctx.font = 'bold 44px Arial';
+        ctx.font = 'italic 40px "Playfair Display", serif';
         ctx.fillText('🐈 Сегодня ты —', canvas.width / 2, 50);
         
-        // 4. Имя героя
+        // Имя
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 52px Arial';
+        ctx.font = 'bold 56px "Playfair Display", serif';
+        ctx.shadowColor = 'rgba(255, 215, 0, 0.3)';
+        ctx.shadowBlur = 20;
         ctx.fillText(hero.name, canvas.width / 2, 115);
+        ctx.shadowBlur = 0;
         
-        // 5. Фото героя (исправлено!)
+        // Фото
         const img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = function() {
@@ -310,28 +323,22 @@ function generateHeroImage(hero) {
             const centerY = 340;
             const radius = 140;
             
-            // Сохраняем контекст для обрезки
             ctx.save();
-            
-            // Создаём круглую маску
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.closePath();
             ctx.clip();
             
-            // Рисуем фото, сохраняя пропорции (cover)
             const imgRatio = img.width / img.height;
             const circleSize = radius * 2;
             let drawWidth, drawHeight, offsetX, offsetY;
             
             if (imgRatio > 1) {
-                // Фото шире, чем круг — обрезаем по бокам
                 drawHeight = circleSize;
                 drawWidth = circleSize * imgRatio;
                 offsetX = (drawWidth - circleSize) / 2;
                 offsetY = 0;
             } else {
-                // Фото выше, чем круг — обрезаем сверху/снизу
                 drawWidth = circleSize;
                 drawHeight = circleSize / imgRatio;
                 offsetX = 0;
@@ -339,11 +346,8 @@ function generateHeroImage(hero) {
             }
             
             ctx.drawImage(img, centerX - radius - offsetX, centerY - radius - offsetY, drawWidth, drawHeight);
-            
-            // Восстанавливаем контекст
             ctx.restore();
             
-            // Рамка вокруг фото
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.closePath();
@@ -351,18 +355,18 @@ function generateHeroImage(hero) {
             ctx.lineWidth = 5;
             ctx.stroke();
             
-            // 6. Описание (без подвала!)
+            // Описание
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
-            ctx.fillStyle = '#c8c8e8';
-            ctx.font = '22px Arial';
+            ctx.fillStyle = '#e0e0ff';
+            ctx.font = '22px "Roboto", sans-serif';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 10;
             
-            // Перенос длинного текста
             const words = hero.description.split(' ');
             let lines = [];
             let currentLine = '';
             for (const word of words) {
-                // Проверяем длину строки в пикселях (приблизительно)
                 const testLine = currentLine + word + ' ';
                 if (testLine.length > 42) {
                     lines.push(currentLine.trim());
@@ -371,8 +375,6 @@ function generateHeroImage(hero) {
                 currentLine += word + ' ';
             }
             if (currentLine.trim()) lines.push(currentLine.trim());
-            
-            // Если слишком много строк — обрезаем до 3
             if (lines.length > 3) lines = lines.slice(0, 3);
             
             const startY = 495;
@@ -380,13 +382,12 @@ function generateHeroImage(hero) {
                 ctx.fillText(line, canvas.width / 2, startY + index * 30);
             });
             
-            // ПОДВАЛ УБРАН!
+            ctx.shadowBlur = 0;
             
-            resolve(canvas.toDataURL('image/png'));
+            resolve(canvas);
         };
         
         img.onerror = function() {
-            // Если фото не загрузилось — рисуем заглушку
             reject(new Error('Не удалось загрузить фото'));
         };
         
