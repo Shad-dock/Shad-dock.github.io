@@ -351,49 +351,43 @@ if (originalSpinWheel) {
 // ================================================================
 
 function fireBananas() {
-    // Бананы-эмодзи (работает в версии 1.9.3+)
+    // Жёлтые круги (бананы)
     confetti({
-        particleCount: 25,
-        spread: 100,
-        origin: { x: 0.5, y: 0.3 },
-        startVelocity: 30,
-        shapes: ['emoji'],
-        shapeOptions: {
-            emoji: {
-                value: ['🍌']
-            }
-        }
+        particleCount: 50,
+        spread: 90,
+        origin: { x: 0.5, y: 0.4 },
+        startVelocity: 35,
+        colors: ['#f9ca24', '#f0932b', '#ffd700', '#ffeaa7'],
+        shapes: ['circle'],
+        gravity: 0.7,
+        scalar: 2
     });
-    
+
     setTimeout(() => {
         confetti({
-            particleCount: 15,
-            spread: 80,
-            origin: { x: 0.2, y: 0.5 },
+            particleCount: 30,
+            spread: 70,
+            origin: { x: 0.3, y: 0.5 },
             startVelocity: 25,
-            shapes: ['emoji'],
-            shapeOptions: {
-                emoji: {
-                    value: ['🍌']
-                }
-            }
+            colors: ['#f9ca24', '#ffd700'],
+            shapes: ['circle'],
+            gravity: 0.8,
+            scalar: 2.5
         });
-    }, 200);
-    
+    }, 150);
+
     setTimeout(() => {
         confetti({
-            particleCount: 15,
-            spread: 80,
-            origin: { x: 0.8, y: 0.4 },
-            startVelocity: 25,
-            shapes: ['emoji'],
-            shapeOptions: {
-                emoji: {
-                    value: ['🍌']
-                }
-            }
+            particleCount: 20,
+            spread: 60,
+            origin: { x: 0.7, y: 0.4 },
+            startVelocity: 30,
+            colors: ['#f0932b', '#ffeaa7'],
+            shapes: ['circle'],
+            gravity: 0.9,
+            scalar: 1.8
         });
-    }, 400);
+    }, 300);
 }
 
 console.log('🐾 heroes.js загружен! Окошко снизу готово. Конфетти 3.0');
