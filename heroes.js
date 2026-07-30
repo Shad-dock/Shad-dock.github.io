@@ -224,7 +224,13 @@ const sheetDescription = document.getElementById('sheetDescription');
 const sheetTags = document.getElementById('sheetTags');
 
 function openSheet(hero) {
-    fireConfetti();
+    // Проверяем, кто выпал
+    if (hero.name === 'Герц-бибизян' && typeof fireBananas === 'function') {
+        fireBananas(); // 🍌 БАНАНЫ
+    } else if (typeof fireConfetti === 'function') {
+        fireConfetti(); // 🎊 КОНФЕТТИ
+    }
+    
     sheetImage.src = hero.image;
     sheetName.textContent = hero.name;
     sheetDescription.textContent = hero.description;
@@ -267,13 +273,28 @@ document.addEventListener('keydown', function(e) {
 
 function addClickToParticipants() {
     const tags = document.querySelectorAll('.participant-tag');
+    console.log('🔍 Найдено тегов:', tags.length); // ← ЛОГ
+    
     tags.forEach((tag, index) => {
         const newTag = tag.cloneNode(true);
         tag.parentNode.replaceChild(newTag, tag);
         
         const hero = heroes[index];
         if (hero) {
+            console.log('✅ Добавляем клик на:', hero.name); // ← ЛОГ
+            
             newTag.addEventListener('click', function() {
+                console.log('🖱️ Клик на:', hero.name); // ← ЛОГ
+                
+                // Проверяем прямо здесь
+                if (hero.name === 'Герц-бибизян' && typeof fireBananas === 'function') {
+                    console.log('🍌 Запускаем бананы!'); // ← ЛОГ
+                    fireBananas();
+                } else {
+                    console.log('🎊 Запускаем конфетти для:', hero.name); // ← ЛОГ
+                    fireConfetti();
+                }
+                
                 openSheet(hero);
             });
         }
@@ -323,6 +344,56 @@ if (originalSpinWheel) {
         statusObserver.observe(status, { childList: true, characterData: true, subtree: true });
         console.log('👀 MutationObserver установлен');
     };
+}
+
+// ================================================================
+//  БАНАНЫ (для Герц-бибизян)
+// ================================================================
+
+function fireBananas() {
+    // Бананы-эмодзи (работает в версии 1.9.3+)
+    confetti({
+        particleCount: 25,
+        spread: 100,
+        origin: { x: 0.5, y: 0.3 },
+        startVelocity: 30,
+        shapes: ['emoji'],
+        shapeOptions: {
+            emoji: {
+                value: ['🍌']
+            }
+        }
+    });
+    
+    setTimeout(() => {
+        confetti({
+            particleCount: 15,
+            spread: 80,
+            origin: { x: 0.2, y: 0.5 },
+            startVelocity: 25,
+            shapes: ['emoji'],
+            shapeOptions: {
+                emoji: {
+                    value: ['🍌']
+                }
+            }
+        });
+    }, 200);
+    
+    setTimeout(() => {
+        confetti({
+            particleCount: 15,
+            spread: 80,
+            origin: { x: 0.8, y: 0.4 },
+            startVelocity: 25,
+            shapes: ['emoji'],
+            shapeOptions: {
+                emoji: {
+                    value: ['🍌']
+                }
+            }
+        });
+    }, 400);
 }
 
 console.log('🐾 heroes.js загружен! Окошко снизу готово. Конфетти 3.0');

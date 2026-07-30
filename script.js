@@ -177,11 +177,13 @@ function spinWheel() {
                 shareBtn.style.display = 'none';
             }
 
-            if (typeof fireConfetti === 'function') {
-                fireConfetti();
-                console.log('🎊 Конфетти вызваны из spinWheel!');
-            } else {
-                console.warn('⚠️ fireConfetti не найдена. Проверь подключение heroes.js');
+        if (typeof fireConfetti === 'function') {
+                const displayName = finalImage.replace(/\.[^.]+$/, '');
+                if (displayName === 'Герц-бибизян' && typeof fireBananas === 'function') {
+                    fireBananas(); // 🍌 БАНАНЫ
+                } else {
+                    fireConfetti(); // 🎊 КОНФЕТТИ
+                }
             }
             
             // Убираем анимацию
